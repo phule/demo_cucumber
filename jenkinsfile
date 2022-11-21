@@ -24,12 +24,13 @@ pipeline {
                 //sh 'git clone https://github.com/phule/demo_cucumber.git'
                 sh 'rm -rf ../codebase.automation-test.realauthentication'
                 sh 'git clone git@bitbucket.org:poetaadmin/codebase.automation-test.realauthentication.git ../codebase.automation-test.realauthentication'
-                //sh 'cd ../codebase.automation-test.realauthentication'
+                
             }
         }
         stage('Dependencies') {
           steps {
             sh "echo Dependencies"
+            sh 'cd /var/lib/jenkins/workspace/codebase.automation-test.realauthentication'
             sh 'npm install'
           }
         }
