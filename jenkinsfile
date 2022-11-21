@@ -30,8 +30,9 @@ pipeline {
         stage('Dependencies') {
           steps {
             sh "echo Dependencies"
+            sh "node --version"
             sh 'cd /var/lib/jenkins/workspace/codebase.automation-test.realauthentication'
-            sh 'npm install'
+            sh 'npm install -g npm@latest'
           }
         }
         stage('Run Test') {
