@@ -25,7 +25,7 @@ pipeline {
                 sh 'cd ..'
                 sh 'rm -rf ../codebase.automation-test.realauthentication'
                 sh 'git clone git@bitbucket.org:poetaadmin/codebase.automation-test.realauthentication.git ../codebase.automation-test.realauthentication'
-                sh 'cd codebase.automation-test.realauthentication'
+                sh 'cd ../codebase.automation-test.realauthentication'
             }
         }
         stage('Dependencies') {
