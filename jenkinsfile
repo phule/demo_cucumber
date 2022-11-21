@@ -1,11 +1,29 @@
+#!groovy
+
+int e2ePassed = 0
+int e2eFailed = 0
+int e2eTotal
+int e2ePercent
+
 pipeline {
     agent any
+    
+    tools {
+        nodejs "16.18.0"
+    }
+
+    environment {
+        DIC_NAME = "${env.JOB_NAME}"
+    }
+  
     stages {
         stage('Clone the repo') {
             steps {
                 echo 'clone the repo'
                 sh 'rm -fr demo_cucumber'
                 sh 'git clone https://github.com/phule/demo_cucumber.git'
+                sh 'git clone git@bitbucket.org:poetaadmin/codebase.automation-test.realauthentication.git'
+                sh 'cd codebase.automation-test.realauthentication'
             }
         }
     }
