@@ -32,7 +32,7 @@ pipeline {
             sh "echo Dependencies"
            
             dir("automation_cucumber"){
-              sh 'npm install -g npm@latest'
+              sh 'npm install'
                 sh 'node index.js'
             }
             
