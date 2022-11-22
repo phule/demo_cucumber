@@ -33,9 +33,13 @@ pipeline {
            
             dir("automation_cucumber"){
               sh 'npm install'
-                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                catchError(buildResult: 'FAILURE', 
+                           stageResult: 'FAILURE',
+                          catchInterruptions: true,
+                           message: "Error") {
                     sh 'npm run test'
                 }
+                sh 'node index.js'
             }
             
           }
@@ -51,15 +55,15 @@ pipeline {
 //             }
 //           }
 //         }
-        stage('Generate HTML report') {
-          steps {
-            sh "Generate HTML report"
-            dir("automation_cucumber"){
-                sh 'npm install'
-                sh 'node index.js'
-            }
-          }
-        }
+//         stage('Generate HTML report') {
+//           steps {
+//             sh "Generate HTML report"
+//             dir("automation_cucumber"){
+//                 sh 'npm install'
+//                 sh 'node index.js'
+//             }
+//           }
+//         }
         stage('Get Results') {
           steps {
             sh "Get Results"
