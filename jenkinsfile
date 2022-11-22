@@ -23,7 +23,7 @@ pipeline {
                 //sh 'rm -fr demo_cucumber'
                 //sh 'git clone https://github.com/phule/demo_cucumber.git'
                 sh 'rm -rf ../codebase.automation-test.realauthentication'
-                sh 'git clone git@bitbucket.org:poetaadmin/codebase.automation-test.realauthentication.git ../codebase.automation-test.realauthentication'
+                sh 'git clone git@bitbucket.org:poetaadmin/codebase.automation-test.realauthentication.git'
                 
             }
         }
@@ -31,7 +31,8 @@ pipeline {
           steps {
             sh "echo Dependencies"
             sh "node --version"
-            sh 'cd /var/lib/jenkins/workspace/codebase.automation-test.realauthentication'
+            //sh 'cd /var/lib/jenkins/workspace/codebase.automation-test.realauthentication'
+            sh 'cd /var/lib/jenkins/workspace/GithubExample/codebase.automation-test.realauthentication'
             sh 'npm install -g npm@latest'
           }
         }
