@@ -55,6 +55,7 @@ pipeline {
           steps {
             sh "Generate HTML report"
             dir("automation_cucumber"){
+                sh 'npm install'
                 sh 'node index.js'
             }
           }
