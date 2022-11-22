@@ -23,7 +23,7 @@ pipeline {
                 //sh 'rm -fr demo_cucumber'
                 //sh 'git clone https://github.com/phule/demo_cucumber.git'
                 sh 'rm -rf ../codebase.automation-test.realauthentication'
-                sh 'git clone git@bitbucket.org:poetaadmin/codebase.automation-test.realauthentication.git -b cucumber'
+                sh 'git clone git@bitbucket.org:poetaadmin/codebase.automation-test.realauthentication.git -b dev cucumber'
                 
             }
         }
