@@ -27,16 +27,24 @@ pipeline {
                 
             }
         }
-//         stage('Dependencies') {
-//           steps {
-//             sh "echo Dependencies"
+        stage('Generate HTML report') {
+          steps {
+            sh "Generate HTML report"
+            dir("automation_cucumber"){
+                sh 'node index.js'
+            }
+          }
+        }
+        stage('Dependencies') {
+          steps {
+            sh "echo Dependencies"
            
-//             dir("automation_cucumber"){
-//               sh 'npm install -g npm@latest'
-//             }
+            dir("automation_cucumber"){
+              sh 'npm install -g npm@latest'
+            }
             
-//           }
-//         }
+          }
+        }
         stage('Run Test') {
           steps {
             sh "Run Test"
@@ -48,14 +56,7 @@ pipeline {
             }
           }
         }
-        stage('Generate HTML report') {
-          steps {
-            sh "Generate HTML report"
-            dir("automation_cucumber"){
-                sh 'node index.js'
-            }
-          }
-        }
+        
         stage('Get Results') {
           steps {
             sh "Get Results"
