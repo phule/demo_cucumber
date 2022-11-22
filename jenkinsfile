@@ -27,23 +27,24 @@ pipeline {
                 
             }
         }
-        stage('Dependencies') {
-          steps {
-            sh "echo Dependencies"
+//         stage('Dependencies') {
+//           steps {
+//             sh "echo Dependencies"
            
-            dir("automation_cucumber"){
-              sh 'npm install'
-                //sh 'node index.js'
-                //sh 'npm run test'
-            }
+//             dir("automation_cucumber"){
+//               sh 'npm install'
+//                 //sh 'node index.js'
+//                 //sh 'npm run test'
+//             }
             
-          }
-        }
+//           }
+//         }
         stage('Run Test') {
           steps {
             sh "Run Test"
             catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                  dir("automation_cucumber"){
+                    sh 'npm install'
                     sh 'npm run test'
                  }
             }
