@@ -27,7 +27,7 @@ pipeline {
                 
             }
         }
-        stage('Dependencies') {
+        stage('Run Test') {
           steps {
             sh "echo Dependencies"
            
