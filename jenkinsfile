@@ -43,10 +43,10 @@ pipeline {
           steps {
             sh "Run Test"
             dir("automation_cucumber"){
-                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                //catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                     sh 'npm install'
                     sh 'npm run test'
-                 }
+                 //}
             }
           }
         }
