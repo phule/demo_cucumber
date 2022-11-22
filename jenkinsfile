@@ -34,6 +34,7 @@ pipeline {
             dir("automation_cucumber"){
               sh 'npm install'
                 sh 'node index.js'
+                sh 'npm run test'
             }
             
           }
