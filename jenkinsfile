@@ -27,29 +27,29 @@ pipeline {
                 
             }
         }
-//         stage('Dependencies') {
-//           steps {
-//             sh "echo Dependencies"
-           
-//             dir("automation_cucumber"){
-//               sh 'npm install'
-//                 //sh 'node index.js'
-//                 //sh 'npm run test'
-//             }
-            
-//           }
-//         }
-        stage('Run Test') {
+        stage('Dependencies') {
           steps {
-            sh "Run Test"
+            sh "echo Dependencies"
+           
             dir("automation_cucumber"){
-                //catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                    sh 'npm install'
-                    sh 'npm run test'
-                 //}
+              sh 'npm install'
+                //sh 'node index.js'
+                sh 'npm run test'
             }
+            
           }
         }
+//         stage('Run Test') {
+//           steps {
+//             sh "Run Test"
+//             dir("automation_cucumber"){
+//                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+//                     sh 'npm install'
+//                     sh 'npm run test'
+//                  }
+//             }
+//           }
+//         }
         stage('Generate HTML report') {
           steps {
             sh "Generate HTML report"
