@@ -36,83 +36,83 @@ pipeline {
           }
         }
         stage('Run Test') {
-              steps {
-                sh "Run Test"
-                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                     sh 'cd /var/lib/jenkins/workspace/GithubExample/automation_cucumber'
-                     sh 'npm run test'
-                }
-              }
+          steps {
+            sh "Run Test"
+            catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                 sh 'cd /var/lib/jenkins/workspace/GithubExample/automation_cucumber'
+                 sh 'npm run test'
             }
-            stage('Generate HTML report') {
-              steps {
-                sh "Generate HTML report"
-                sh 'cd /var/lib/jenkins/workspace/GithubExample/cucumber'
-                sh 'node index.js'
-              }
-            }
-            stage('Get Results') {
-              steps {
-                sh "Get Results"
-                  /*
-                  run test, copy the report file out of docker or where ever it is...
-                  */
+          }
+        }
+        stage('Generate HTML report') {
+          steps {
+            sh "Generate HTML report"
+            sh 'cd /var/lib/jenkins/workspace/GithubExample/cucumber'
+            sh 'node index.js'
+          }
+        }
+        stage('Get Results') {
+          steps {
+            sh "Get Results"
+              /*
+              run test, copy the report file out of docker or where ever it is...
+              */
 
-                  archiveArtifacts artifacts: "cucumber_report.html", fingerprint: true
+              archiveArtifacts artifacts: "cucumber_report.html", fingerprint: true
 
-                  // our Groovy script will be contained in this scope
-                  script {
-                      println ('Extracting passed & failed values')
+              // our Groovy script will be contained in this scope
+              script {
+                  println ('Extracting passed & failed values')
 
-                      // get the present working directory (PWD)
-                      String PWD = pwd()
+                  // get the present working directory (PWD)
+                  String PWD = pwd()
 
-                      // based on this, construct the path to the workspace
-                      String workspacePath = PWD.substring(PWD.lastIndexOf('/') + 1, PWD.length())
+                  // based on this, construct the path to the workspace
+                  String workspacePath = PWD.substring(PWD.lastIndexOf('/') + 1, PWD.length())
 
-                      // read our HTML report into a String
-                      String report = readFile ("./reports/cucumber_report.html")
+                  // read our HTML report into a String
+                  String report = readFile ("./reports/cucumber_report.html")
 
-                      // split each line break into its own String
-                      String[] lines = report.split("\n")
+                  // split each line break into its own String
+                  String[] lines = report.split("\n")
 
-                      // use regex to find the "passed" line and "failed" line
-                      def foundPassedLine = lines.find{ line-> line =~ /\<span class="label label-success" title=scenarios\>/ }
-                      def foundFailedLine = lines.find{ line-> line =~ /\<span class="label label-danger" title=scenarios\>/ }
+                  // use regex to find the "passed" line and "failed" line
+                  def foundPassedLine = lines.find{ line-> line =~ /\<span class="label label-success" title=scenarios\>/ }
+                  def foundFailedLine = lines.find{ line-> line =~ /\<span class="label label-danger" title=scenarios\>/ }
 
-                      // match for the numeric values
-                      def passedMatch = (foundPassedLine =~ /[0-9]+/)
-                      def failedMatch = (foundFailedLine =~ /[0-9]+/)
+                  // match for the numeric values
+                  def passedMatch = (foundPassedLine =~ /[0-9]+/)
+                  def failedMatch = (foundFailedLine =~ /[0-9]+/)
 
-                      // cast to Integer so we can work with the number values
-                      e2ePassed = passedMatch[0] as Integer
-                      e2eFailed = failedMatch[0] as Integer
-                      e2eTotal = e2eFailed + e2ePassed
-                      e2ePercent = e2ePassed / e2eTotal * 100
+                  // cast to Integer so we can work with the number values
+                  e2ePassed = passedMatch[0] as Integer
+                  e2eFailed = failedMatch[0] as Integer
+                  e2eTotal = e2eFailed + e2ePassed
+                  e2ePercent = e2ePassed / e2eTotal * 100
 
-                      if (e2eFailed > 0) {
-                          // do something extra if there are failures
-                          currentBuild.result = "FAILURE"
-                      }
-
-                      // print out our results to the console
-                      println ("Passed: ${e2ePassed}")
-                      println ("Failed: ${e2eFailed}")
-                      println ("Percent passes: ${e2ePercent}%")
+                  if (e2eFailed > 0) {
+                      // do something extra if there are failures
+                      currentBuild.result = "FAILURE"
                   }
 
-                  // we can also access these values in an `sh` declaration (or other functions) outside of `script` now
-                  sh "echo \"Passed: ${e2ePassed}\""
-                  sh "echo \"Failed: ${e2eFailed}\""
-                  sh "echo \"Percent passes: ${e2ePercent}%\""
+                  // print out our results to the console
+                  println ("Passed: ${e2ePassed}")
+                  println ("Failed: ${e2eFailed}")
+                  println ("Percent passes: ${e2ePercent}%")
+              }
 
-                  // you may opt to use the vars in plugins like `slackSend`, etc
-              }
-            }
-            stage('Clean') {
-              steps {
-                cleanWs()
-              }
-            }
+              // we can also access these values in an `sh` declaration (or other functions) outside of `script` now
+              sh "echo \"Passed: ${e2ePassed}\""
+              sh "echo \"Failed: ${e2eFailed}\""
+              sh "echo \"Percent passes: ${e2ePercent}%\""
+
+              // you may opt to use the vars in plugins like `slackSend`, etc
+          }
+        }
+        stage('Clean') {
+          steps {
+            cleanWs()
+          }
+        }
     }
 }
