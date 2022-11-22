@@ -23,7 +23,7 @@ pipeline {
                 //sh 'rm -fr demo_cucumber'
                 //sh 'git clone https://github.com/phule/demo_cucumber.git'
                 sh 'rm -rf ../codebase.automation-test.realauthentication'
-                sh 'git clone git@bitbucket.org:poetaadmin/codebase.automation-test.realauthentication.git'
+                sh 'git clone git@bitbucket.org:poetaadmin/codebase.automation-test.realauthentication.git -b cucumber'
                 
             }
         }
@@ -31,22 +31,23 @@ pipeline {
           steps {
             sh "echo Dependencies"
             sh "node --version"
-            //sh 'cd /var/lib/jenkins/workspace/codebase.automation-test.realauthentication'
-            sh 'cd /var/lib/jenkins/workspace/GithubExample/codebase.automation-test.realauthentication'
-            sh 'npm install -g npm@latest'
+            sh 'cd /var/lib/jenkins/workspace/GithubExample/cucumber'
+            sh 'npm install'
           }
         }
         stage('Run Test') {
               steps {
                 sh "Run Test"
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                  sh 'npm run test'
+                     sh 'cd /var/lib/jenkins/workspace/GithubExample/cucumber'
+                     sh 'npm run test'
                 }
               }
             }
             stage('Generate HTML report') {
               steps {
                 sh "Generate HTML report"
+                sh 'cd /var/lib/jenkins/workspace/GithubExample/cucumber'
                 sh 'node index.js'
               }
             }
