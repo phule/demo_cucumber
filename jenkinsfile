@@ -31,8 +31,12 @@ pipeline {
           steps {
             sh "echo Dependencies"
             sh "node --version"
-            sh 'cd /var/lib/jenkins/workspace/GithubExample/automation_cucumber'
-            sh 'npm install -g npm@latest'
+            //sh 'cd /var/lib/jenkins/workspace/GithubExample/automation_cucumber'
+              dir("GithubExample/automation_cucumber"){
+                  sh 'npm install -g npm@latest'
+                  sh 'npm run test'
+              }
+            
           }
         }
         stage('Run Test') {
