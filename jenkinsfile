@@ -83,8 +83,10 @@ pipeline {
                       e2ePassed = passedMatch[0] as Integer
                       e2eFailed = failedMatch[0] as Integer
                       e2eTotal = e2eFailed + e2ePassed
-                      e2ePercent = e2ePassed / e2eTotal * 100
-
+                      e2ePercent = 0
+                      if(e2eTotal > 0){
+                        e2ePercent = e2ePassed / e2eTotal * 100
+                      }  
                       if (e2eFailed > 0) {
                           // do something extra if there are failures
                           currentBuild.result = "FAILURE"
