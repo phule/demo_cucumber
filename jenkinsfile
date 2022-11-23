@@ -89,9 +89,7 @@ pipeline {
 
                       // split each line break into its own String
                       String[] lines = report.split("\n")
-                      new File("${env.PWD}/workspace/${env.JOB_NAME}/${workspacePath}/test/report/cucumber_report.html").eachLine{
-                          line -> println line
-                      }
+                     
                       // use regex to find the "passed" line and "failed" line
                       def foundPassedLine = lines.find{ line-> line =~ /\<span class="label label-success" title=scenarios\>/ }
                       def foundFailedLine = lines.find{ line-> line =~ /\<span class="label label-danger" title=scenarios\>/ }
