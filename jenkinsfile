@@ -91,8 +91,8 @@ pipeline {
                       String[] lines = report.split("\n")
                         
                       // use regex to find the "passed" line and "failed" line
-                      def foundPassedLine = lines.find{ line-> line =~ /\<span class="label label-success" title=scenarios\>/ }
-                      def foundFailedLine = lines.find{ line-> line =~ /\<span class="label label-danger" title=scenarios\>/ }
+                      def foundPassedLine = lines.find{ line-> line =~ /\<span class="label label-success" onclick="toggle('.feature-passed')" title="scenarios"\>/ }
+                      def foundFailedLine = lines.find{ line-> line =~ /\<span class="label label-danger" onclick="toggle('.feature-failed')" title="scenarios"\>/ }
                       print foundPassedLine 
                       // match for the numeric values
                       def passedMatch = (foundPassedLine =~ /[0-9]+/)
