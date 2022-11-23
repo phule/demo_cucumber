@@ -37,6 +37,7 @@ pipeline {
                            stageResult: 'FAILURE',
                           catchInterruptions: true,
                            message: "Error") {
+                    sh 'chmod +x chromedriver'
                     sh 'npm run test'
                 }
                 sh 'node index.js'
