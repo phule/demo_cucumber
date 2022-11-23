@@ -85,7 +85,7 @@ pipeline {
                       String workspacePath = PWD.substring(PWD.lastIndexOf('/') + 1, PWD.length())
 
                       // read our HTML report into a String
-                      String report = readFile ("./reports/cucumber_report.html")
+                      String report = readFile ("./test/report/cucumber_report.html")
 
                       // split each line break into its own String
                       String[] lines = report.split("\n")
