@@ -85,15 +85,15 @@ pipeline {
                       String workspacePath = PWD.substring(PWD.lastIndexOf('/') + 1, PWD.length())
 
                       // read our HTML report into a String
-                      String report = readFile ("./test/report/cucumber_report.html")
+                      String report = readFile ("${env.PWD}/workspace/${workspacePath}/cucumber_report.html")
 
                       // split each line break into its own String
                       String[] lines = report.split("\n")
-                      println (lines)  
+                        
                       // use regex to find the "passed" line and "failed" line
-                      def foundPassedLine = lines.find{ line-> line =~ /\<span class="label label-success"\>/ }
-                      def foundFailedLine = lines.find{ line-> line =~ /\<span class="label label-danger"\>/ }
-                      print foundPassedLine 
+                      def foundPassedLine = lines.find{ line-> line =~ /\<span class="label label-success" title=scenarios\>/ }
+                      def foundFailedLine = lines.find{ line-> line =~ /\<span class="label label-danger" title=scenarios\>/ }
+                      
                       // match for the numeric values
                       def passedMatch = (foundPassedLine =~ /[0-9]+/)
                       def failedMatch = (foundFailedLine =~ /[0-9]+/)
