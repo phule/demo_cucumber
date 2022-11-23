@@ -66,7 +66,7 @@ pipeline {
 //         }
         stage('Get Results') {
           steps {
-            sh "Get Results"
+            sh "echo Get Results"
               dir("automation_cucumber"){
                   /*
                   run test, copy the report file out of docker or where ever it is...
