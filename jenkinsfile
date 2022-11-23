@@ -22,39 +22,39 @@ pipeline {
                 echo 'clone the repo'
                 //sh 'rm -fr demo_cucumber'
                 //sh 'git clone https://github.com/phule/demo_cucumber.git'
-                sh 'rm -rf ../codebase.automation-test.realauthentication'
-                sh 'git clone git@bitbucket.org:poetaadmin/codebase.automation-test.realauthentication.git ../codebase.automation-test.realauthentication'
-                sh 'cd ../codebase.automation-test.realauthentication'
+                sh 'rm -rf automation_cucumber'
+                sh 'git clone git@bitbucket.org:poetaadmin/codebase.automation-test.realauthentication.git -b dev automation_cucumber'
+                
             }
-        }
-        stage('Dependencies') {
-          steps {
-            sh "echo Dependencies"
-            sh 'npm install'
-          }
         }
         stage('Run Test') {
-              steps {
-                sh "Run Test"
-                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                  sh 'npm run test'
+          steps {
+            sh "echo Dependencies"
+           
+            dir("automation_cucumber"){
+              sh 'npm install'
+                catchError(buildResult: 'FAILURE', 
+                           stageResult: 'FAILURE',
+                          catchInterruptions: true,
+                           message: "Error") {
+                    sh 'chmod +x chromedriver'
+                    sh 'npm run test'
                 }
-              }
-            }
-            stage('Generate HTML report') {
-              steps {
-                sh "Generate HTML report"
                 sh 'node index.js'
-              }
             }
-            stage('Get Results') {
-              steps {
-                sh "Get Results"
+            
+          }
+        }
+
+        stage('Get Results') {
+          steps {
+            sh "echo Get Results"
+              dir("automation_cucumber"){
                   /*
                   run test, copy the report file out of docker or where ever it is...
                   */
 
-                  archiveArtifacts artifacts: "cucumber_report.html", fingerprint: true
+                  //archiveArtifacts artifacts: "cucumber_report.html", fingerprint: true
 
                   // our Groovy script will be contained in this scope
                   script {
@@ -67,15 +67,15 @@ pipeline {
                       String workspacePath = PWD.substring(PWD.lastIndexOf('/') + 1, PWD.length())
 
                       // read our HTML report into a String
-                      String report = readFile ("./reports/cucumber_report.html")
+                      String report = readFile ("${env.PWD}/workspace/${env.JOB_NAME}/${workspacePath}/test/report/cucumber_report.html")
 
                       // split each line break into its own String
                       String[] lines = report.split("\n")
-
+                     
                       // use regex to find the "passed" line and "failed" line
-                      def foundPassedLine = lines.find{ line-> line =~ /\<span class="label label-success" title=scenarios\>/ }
-                      def foundFailedLine = lines.find{ line-> line =~ /\<span class="label label-danger" title=scenarios\>/ }
-
+                      def foundPassedLine = lines.find{ line-> line =~ /span class="label label-success"/ }
+                      def foundFailedLine = lines.find{ line-> line =~ /span class="label label-danger"/ }
+                      
                       // match for the numeric values
                       def passedMatch = (foundPassedLine =~ /[0-9]+/)
                       def failedMatch = (foundFailedLine =~ /[0-9]+/)
@@ -84,8 +84,10 @@ pipeline {
                       e2ePassed = passedMatch[0] as Integer
                       e2eFailed = failedMatch[0] as Integer
                       e2eTotal = e2eFailed + e2ePassed
-                      e2ePercent = e2ePassed / e2eTotal * 100
-
+                      e2ePercent = 0
+                      if(e2eTotal > 0){
+                        e2ePercent = e2ePassed / e2eTotal * 100
+                      }  
                       if (e2eFailed > 0) {
                           // do something extra if there are failures
                           currentBuild.result = "FAILURE"
@@ -101,14 +103,14 @@ pipeline {
                   sh "echo \"Passed: ${e2ePassed}\""
                   sh "echo \"Failed: ${e2eFailed}\""
                   sh "echo \"Percent passes: ${e2ePercent}%\""
-
-                  // you may opt to use the vars in plugins like `slackSend`, etc
               }
-            }
-            stage('Clean') {
-              steps {
-                cleanWs()
-              }
-            }
+              // you may opt to use the vars in plugins like `slackSend`, etc
+          }
+        }
+//         stage('Clean') {
+//           steps {
+//             cleanWs()
+//           }
+//         }
     }
 }
