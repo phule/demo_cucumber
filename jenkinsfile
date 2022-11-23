@@ -104,10 +104,10 @@ pipeline {
               // you may opt to use the vars in plugins like `slackSend`, etc
           }
         }
-        stage('Clean') {
-          steps {
-            cleanWs()
-          }
-        }
+//         stage('Clean') {
+//           steps {
+//             cleanWs()
+//           }
+//         }
     }
 }
