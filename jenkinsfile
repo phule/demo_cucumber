@@ -40,7 +40,7 @@ pipeline {
                 sh 'yarn install'
                 sh 'npm install'
                 sh 'npm run prod'
-                sh 'echo QSr%@B{7bME3@6L | sudo -S chown -R forge:www-data' .
+                sh 'echo QSr%@B{7bME3@6L | sudo -S chown -R forge:www-data .'
                 sh 'echo QSr%@B{7bME3@6L | sudo -S chgrp -R  www-data storage/'
                 sh 'echo QSr%@B{7bME3@6L | sudo -S chmod -R ug+rwx storage'
                 sh 'php artisan migrate'
