@@ -23,13 +23,13 @@ pipeline {
         stage('Clone qc test'){
             steps {
                 echo 'remote server'
-                node{
-                    withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: 'id_rsa_qc', passphraseVariable: '', usernameVariable: 'forge')]) {
-                        remote.user = userName
-                        remote.identityFile = identity
-                        sshScript remote: remote, script: "auto-test.sh"
-                    }
+                
+                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'forge')]) {
+                    remote.user = forge
+                    remote.identityFile = identity
+                    sshScript remote: remote, script: "auto-test.sh"
                 }
+                
             }
         }
         stage('Clone the repo') {
