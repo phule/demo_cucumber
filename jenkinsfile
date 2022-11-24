@@ -4,10 +4,7 @@ int e2ePassed = 0
 int e2eFailed = 0
 int e2eTotal
 int e2ePercent
-def remote = [:]
-remote.name = "ra-auto-test"
-remote.host = "52.13.190.167"
-remote.allowAnyHosts = true
+
 pipeline {
     agent any
     
@@ -23,13 +20,19 @@ pipeline {
     stages {
         stage('qc auto test') {
             steps{
-                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: 'id_rsa_qc', passphraseVariable: '', usernameVariable: 'forge')]) {
-                    step{
-                        remote.user = forge
-                        remote.identityFile = identity
-                        sshScript remote: remote, script: "auto-test.sh"
+                script{
+                    def remote = [:]
+                    remote.name = "ra-auto-test"
+                    remote.host = "52.13.190.167"
+                    remote.allowAnyHosts = true
+                    withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: 'id_rsa_qc', passphraseVariable: '', usernameVariable: 'forge')]) {
+                        step{
+                            remote.user = forge
+                            remote.identityFile = identity
+                            sshScript remote: remote, script: "auto-test.sh"
+                        }
                     }
-                }
+                }   
             }
         }
         stage('Clone the repo') {
