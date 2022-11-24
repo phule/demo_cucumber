@@ -26,11 +26,11 @@ pipeline {
                     remote.host = "52.13.190.167"
                     remote.allowAnyHosts = true
                     withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: '/var/lib/jenkins/id_rsa_qc', passphraseVariable: '', usernameVariable: 'forge')]) {
-                        step{
+                        
                             remote.user = forge
                             remote.identityFile = identity
                             sshScript remote: remote, script: "auto-test.sh"
-                        }
+                       
                     }
                 }   
             }
