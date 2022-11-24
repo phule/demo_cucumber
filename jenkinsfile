@@ -21,20 +21,23 @@ pipeline {
             steps {
                 echo 'remote server'
                 sh 'ssh -i ~/.ssh/id_rsa_qc forge@52.13.190.167'
-                sh 'cd releases-auto-test'
-                sh 'ls -lt | tail -n +5 | awk "{print $9}" | xargs rm -rf'
-                sh 'git clone git@github.com:Real-Authentication/BFS_RLA.git RA_$(date +"%Y%m%d%s")' 
-                sh 'cd $(ls -td -- */ | head -n 1)'
-                sh 'git checkout qc'
-                sh 'git pull'
-                sh 'cp ~/environment-auto-test/.env www/'
-                sh 'cp ~/environment-auto-test/.env.frontend www/front/.env'
-                sh 'cp ~/environment-auto-test/oauth-* www/storage/'
-                sh 'cd www/front'
-                sh 'npm install'
-                sh 'npm run build-prod:main'
-                sh 'npm run build-prod:admin'
-                sh 'npm run build:global-header-and-footer'
+                dir('releases-auto-test'){
+                    sh 'ls -lt | tail -n +5 | awk "{print $9}" | xargs rm -rf'
+                    sh 'git clone git@github.com:Real-Authentication/BFS_RLA.git RA_$(date +"%Y%m%d%s")' 
+                }
+                dir($(ls -td -- */ | head -n 1)){
+                    sh 'git checkout qc'
+                    sh 'git pull'
+                    sh 'cp ~/environment-auto-test/.env www/'
+                    sh 'cp ~/environment-auto-test/.env.frontend www/front/.env'
+                    sh 'cp ~/environment-auto-test/oauth-* www/storage/'
+                }
+                dir('www/front'){
+                    sh 'npm install'
+                    sh 'npm run build-prod:main'
+                    sh 'npm run build-prod:admin'
+                    sh 'npm run build:global-header-and-footer'
+                }
                 sh 'cd ..'
                 sh 'composer install'
                 sh 'yarn install'
