@@ -26,11 +26,13 @@ pipeline {
                     remote.host = '52.13.190.167'
                     
                     remote.allowAnyHosts = true
-                    withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'forge')]) {
-                        remote.user = forge
-                        remote.identityFile = identity
-                        sshCommand remote: remote, command: 'for i in {1..5}; do echo -n \"Loop \$i \"; date ; sleep 1; done'
-                        //sshScript remote: remote, script: "auto-test.sh"
+                    node {
+                        withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'forge')]) {
+                            remote.user = forge
+                            remote.identityFile = identity
+                            sshCommand remote: remote, command: 'for i in {1..5}; do echo -n \"Loop \$i \"; date ; sleep 1; done'
+                            //sshScript remote: remote, script: "auto-test.sh"
+                        }
                     }
                 }   
             }
