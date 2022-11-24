@@ -4,7 +4,10 @@ int e2ePassed = 0
 int e2eFailed = 0
 int e2eTotal
 int e2ePercent
-
+def remote = [:]
+remote.name = "ra-auto-test"
+remote.host = "52.13.190.167"
+remote.allowAnyHosts = true
 pipeline {
     agent any
     
@@ -18,49 +21,11 @@ pipeline {
   
     stages {
         stage('Clone qc test'){
-            steps {
+            withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: 'id_rsa_qc', passphraseVariable: '', usernameVariable: 'forge')]) {
+                remote.user = forge
+                remote.identityFile = identity
                 echo 'remote server'
-                sshagent(credentials:['ssh-agent']) {
-                    sh '''
-                        ssh -i ~/id_rsa_qc forge@52.13.190.167 uname -a 
-                        cd releases-auto-test 
-                        git clone git@github.com:Real-Authentication/BFS_RLA.git RA_$(date +"%Y%m%d%s")
-                    '''
-                    //sh 'cd releases-auto-test'
-                    //sh 'ls -lt | tail -n +5 | awk "{print $9}" | xargs rm -rf'
-                    //sh 'git clone git@github.com:Real-Authentication/BFS_RLA.git RA_$(date +"%Y%m%d%s")'
-                }
-                
-//                 dir($(ls -td -- */ | head -n 1)){
-//                     sh 'git checkout qc'
-//                     sh 'git pull'
-//                     sh 'cp ~/environment-auto-test/.env www/'
-//                     sh 'cp ~/environment-auto-test/.env.frontend www/front/.env'
-//                     sh 'cp ~/environment-auto-test/oauth-* www/storage/'
-//                 }
-//                 dir('www/front'){
-//                     sh 'npm install'
-//                     sh 'npm run build-prod:main'
-//                     sh 'npm run build-prod:admin'
-//                     sh 'npm run build:global-header-and-footer'
-//                 }
-//                 sh 'cd ..'
-//                 sh 'composer install'
-//                 sh 'yarn install'
-//                 sh 'npm install'
-//                 sh 'npm run prod'
-//                 sh 'echo QSr%@B{7bME3@6L | sudo -S chown -R forge:www-data .'
-//                 sh 'echo QSr%@B{7bME3@6L | sudo -S chgrp -R  www-data storage/'
-//                 sh 'echo QSr%@B{7bME3@6L | sudo -S chmod -R ug+rwx storage'
-//                 sh 'php artisan migrate'
-//                 sh 'php artisan config:clear'
-//                 sh 'composer customer-api-test'
-//                 sh 'cd ~'
-//                 sh 'rm app.realauthentication.com-plus'
-//                 sh 'ln -sf "$(ls -1dt releases-plus/*/ | sed 1q)" app.realauthentication.com-plus'
-//                 sh 'echo QSr%@B{7bME3@6L | sudo -S service php7.3-fpm restart'
-//                 sh 'echo QSr%@B{7bME3@6L | sudo supervisorctl stop horizon'
-//                 sh 'echo QSr%@B{7bME3@6L | sudo supervisorctl start horizon'
+                sshScript remote: remote, script: "auto-test.sh"
             }
         }
         stage('Clone the repo') {
