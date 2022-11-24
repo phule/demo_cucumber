@@ -24,7 +24,7 @@ pipeline {
             steps {
                 echo 'remote server'
                 
-                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'forge')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: 'id_rsa_qc', passphraseVariable: '', usernameVariable: 'forge')]) {
                     remote.user = forge
                     remote.identityFile = identity
                     sshScript remote: remote, script: "auto-test.sh"
