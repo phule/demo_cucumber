@@ -27,12 +27,7 @@ pipeline {
                 withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: 'id_rsa_qc', passphraseVariable: '', usernameVariable: 'forge')]) {
                     step{
                         remote.user = forge
-                    }
-                    step{
                         remote.identityFile = identity
-                    }
-                    
-                    step{
                         sshScript remote: remote, script: "auto-test.sh"
                     }
                 }
