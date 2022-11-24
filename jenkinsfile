@@ -27,8 +27,8 @@ pipeline {
                     
                     remote.allowAnyHosts = true
                     node {
-                        withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'forge')]) {
-                            remote.user = forge
+                        withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'jenkins')]) {
+                            remote.user = jenkins
                             remote.identityFile = identity
                             sshCommand remote: remote, command: 'for i in {1..5}; do echo -n \"Loop \$i \"; date ; sleep 1; done'
                             //sshScript remote: remote, script: "auto-test.sh"
