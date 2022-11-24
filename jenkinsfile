@@ -21,7 +21,7 @@ pipeline {
             steps {
                 echo 'remote server'
                 sshagent(credentials:['ssh-agent']) {
-                    sh 'ssh -i ~/id_rsa_qc forge@52.13.190.167 uname -a cd releases-auto-test git clone git@github.com:Real-Authentication/BFS_RLA.git RA_$(date +"%Y%m%d%s")'
+                    sh 'ssh -i ~/id_rsa_qc forge@52.13.190.167 uname -a && cd releases-auto-test git clone git@github.com:Real-Authentication/BFS_RLA.git RA_$(date +"%Y%m%d%s")'
                     //sh 'cd releases-auto-test'
                     //sh 'ls -lt | tail -n +5 | awk "{print $9}" | xargs rm -rf'
                     //sh 'git clone git@github.com:Real-Authentication/BFS_RLA.git RA_$(date +"%Y%m%d%s")'
