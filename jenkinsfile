@@ -24,12 +24,13 @@ pipeline {
                     def remote = [:]
                     remote.name = 'ra-auto-test'
                     remote.host = '52.13.190.167'
-                    remote.user = 'forge'
+                    
                     remote.allowAnyHosts = true
                     withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'forge')]) {
                         remote.user = forge
                         remote.identityFile = identity
-                        sshScript remote: remote, script: "auto-test.sh"
+                        sshCommand remote: remote, command: 'for i in {1..5}; do echo -n \"Loop \$i \"; date ; sleep 1; done'
+                        //sshScript remote: remote, script: "auto-test.sh"
                     }
                 }   
             }
