@@ -8,7 +8,7 @@ def remote = [:]
 remote.name = "ra-auto-test"
 remote.host = "52.13.190.167"
 remote.user = "forge"
-remote.identityFile = "/var/lib/jenkins/id_rsa_qc"
+remote.identityFile = "~/.ssh/id_rsa_qc"
 remote.allowAnyHosts = true
 pipeline {
     agent any
