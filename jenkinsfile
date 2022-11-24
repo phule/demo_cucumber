@@ -19,18 +19,20 @@ pipeline {
         DIC_NAME = "${env.JOB_NAME}"
     }
     
-    node{
-        echo 'remote server'
-        withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: 'id_rsa_qc', passphraseVariable: '', usernameVariable: 'forge')]) {
-            remote.user = forge
-            remote.identityFile = identity
-            stage('Clone qc test'){
-                sshScript remote: remote, script: "auto-test.sh"
+    
+    stages {
+        stage('qc auto test') {
+            steps{
+                echo 'remote server'
+                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: 'id_rsa_qc', passphraseVariable: '', usernameVariable: 'forge')]) {
+                    remote.user = forge
+                    remote.identityFile = identity
+                    stage('Clone qc test'){
+                        sshScript remote: remote, script: "auto-test.sh"
+                    }
+                }
             }
         }
-    }
-    stages {
-        
         stage('Clone the repo') {
             steps {
                 echo 'clone the repo'
