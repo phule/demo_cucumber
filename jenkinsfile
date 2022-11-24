@@ -24,10 +24,8 @@ pipeline {
             withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: 'id_rsa_qc', passphraseVariable: '', usernameVariable: 'forge')]) {
                 remote.user = forge
                 remote.identityFile = identity
-                steps {
-                    echo 'remote server'
-                    sshScript remote: remote, script: "auto-test.sh"
-                }
+                echo 'remote server'
+                sshScript remote: remote, script: "auto-test.sh"
             }
         }
         stage('Clone the repo') {
