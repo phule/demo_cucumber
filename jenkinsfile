@@ -29,7 +29,7 @@ pipeline {
                     node {
                         withCredentials([sshUserPrivateKey(credentialsId: 'ssh-agent', keyFileVariable: '.ssh/id_rsa_qc', passphraseVariable: '', usernameVariable: 'jenkins')]) {
                             remote.user = jenkins
-                            remote.identityFile = .ssh/id_rsa_qc
+                            remote.identityFile = '.ssh/id_rsa_qc'
                             sshCommand remote: remote, command: 'for i in {1..5}; do echo -n \"Loop \$i \"; date ; sleep 1; done'
                             //sshScript remote: remote, script: "auto-test.sh"
                         }
