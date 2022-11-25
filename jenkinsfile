@@ -30,8 +30,8 @@ pipeline {
                         withCredentials([sshUserPrivateKey(credentialsId: 'ra-auto-test', keyFileVariable: 'id_rsa_qc', passphraseVariable: '', usernameVariable: 'forge')]) {
                             remote.user = forge
                             remote.identityFile = id_rsa_qc
-                            sshCommand remote: remote, command: 'for i in {1..5}; do echo -n \"Loop \$i \"; date ; sleep 1; done'
-                            //sshScript remote: remote, script: "auto-test.sh"
+                            //sshCommand remote: remote, command: 'for i in {1..5}; do echo -n \"Loop \$i \"; date ; sleep 1; done'
+                            sshScript remote: remote, script: "auto-test.sh"
                         }
                     }
                 }   
