@@ -31,7 +31,8 @@ pipeline {
                             remote.user = forge
                             remote.identityFile = id_rsa_qc
                             sshCommand remote: remote, command: 'for i in {1..5}; do echo -n \"Loop \$i \"; date ; sleep 1; done'
-                            //sshScript remote: remote, script: "auto-test.sh"
+                            sshPut remote: remote, from: 'auto-test.sh', into: '/home/forge/releases-plus'
+                            sshScript remote: remote, script: "/home/forge/releases-plus/auto-test.sh"
                         }
                     }
                 }   
