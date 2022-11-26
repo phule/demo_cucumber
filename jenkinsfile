@@ -26,12 +26,20 @@ pipeline {
                     remote.host = '52.13.190.167'
                     
                     remote.allowAnyHosts = true
+                    // get the present working directory (PWD)
+                    String PWD = pwd()
+
+                    // based on this, construct the path to the workspace
+                    String workspacePath = PWD.substring(PWD.lastIndexOf('/') + 1, PWD.length())
                     node {
                         withCredentials([sshUserPrivateKey(credentialsId: 'ra-auto-test', keyFileVariable: 'id_rsa_qc', passphraseVariable: '', usernameVariable: 'forge')]) {
                             remote.user = forge
                             remote.identityFile = id_rsa_qc
                             sshCommand remote: remote, command: 'for i in {1..5}; do echo -n \"Loop \$i \"; date ; sleep 1; done'
-                            //sshScript remote: remote, script: "auto-test.sh"
+                           
+                            //sshPut remote: remote, from: "${env.PWD}/workspace/${env.JOB_NAME}/auto-test.sh", into: '/home/forge/releases-plus/auto-test.sh'
+                            sshScript remote: remote, script: "${env.PWD}/workspace/${env.JOB_NAME}/auto-test.sh"
+                            
                         }
                     }
                 }   
@@ -127,10 +135,10 @@ pipeline {
               // you may opt to use the vars in plugins like `slackSend`, etc
           }
         }
-        stage('Clean') {
-          steps {
-            cleanWs()
-          }
-        }
+//         stage('Clean') {
+//           steps {
+//             cleanWs()
+//           }
+//         }
     }
 }
