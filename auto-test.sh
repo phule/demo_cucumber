@@ -1,8 +1,8 @@
-cd releases-plus 
-ls -lt | tail -n +5 | awk "{print $9}" | xargs rm -rf
-git clone git@github.com:Real-Authentication/BFS_RLA.git RA_$(date +"%Y%m%d%s")
+cd releases-plus
+ls -lt | tail -n +5 | awk '{print $9}' | xargs rm -rf
+git clone git@github.com:Real-Authentication/BFS_RLA.git RA_$(date +"%Y%m%d%s") 
 cd $(ls -td -- */ | head -n 1)
-git checkout qc
+git checkout qc-temp
 git pull
 cp ~/environment-plus/.env www/
 cp ~/environment-plus/.env.frontend www/front/.env
@@ -25,7 +25,7 @@ php artisan config:clear
 composer customer-api-test
 cd ~
 rm app.realauthentication.com-plus
-ln -sf "$(ls -1dt releases-auto-test/*/ | sed 1q)" app.realauthentication.com-plus
+ln -sf "$(ls -1dt releases-plus/*/ | sed 1q)" app.realauthentication.com-plus
 echo QSr%@B{7bME3@6L | sudo -S service php7.3-fpm restart
 echo QSr%@B{7bME3@6L | sudo supervisorctl stop horizon
 echo QSr%@B{7bME3@6L | sudo supervisorctl start horizon
