@@ -2,7 +2,7 @@ cd releases-plus
 ls -lt | tail -n +5 | awk '{print $9}' | xargs rm -rf
 git clone git@github.com:Real-Authentication/BFS_RLA.git RA_$(date +"%Y%m%d%s") 
 cd $(ls -td -- */ | head -n 1)
-git checkout qc-temp
+git checkout qc
 git pull
 cp ~/environment-plus/.env www/
 cp ~/environment-plus/.env.frontend www/front/.env
