@@ -4,7 +4,6 @@ int e2ePassed = 0
 int e2eFailed = 0
 int e2eTotal
 int e2ePercent
-def reportFileName = currentBuild.startTimeInMillis
 
 pipeline {
     agent any
@@ -21,7 +20,7 @@ pipeline {
     stages {
         stage('Build Qc Auto Test') {
             steps{
-                sh 'echo ${reportFileName}'
+                sh 'echo ${env.BUILD_ID}'
 //                 script{
 //                     def remote = [:]
 //                     remote.name = 'ra-auto-test'
