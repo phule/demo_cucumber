@@ -14,7 +14,7 @@ pipeline {
 
     environment {
         DIC_NAME = "${env.JOB_NAME}"
-        REPORT_FILE_NAME = "${env.BUILD_ID}"
+        REPORT_FILE_NAME = "report-${env.BUILD_ID}"
     }
     
     
