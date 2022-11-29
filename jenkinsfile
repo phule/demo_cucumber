@@ -69,7 +69,7 @@ pipeline {
                     sh 'npm run test'
                 }
                 sh 'node index.js'
-                sh 'cp test/report/cucumber_report.html /var/www/html/index.html'
+                sh 'cp test/report/cucumber_report.html /var/www/html/$report-(date +%Y%m%d%H%M%S).html'
             }
             
           }
