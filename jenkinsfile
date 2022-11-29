@@ -14,7 +14,7 @@ pipeline {
 
     environment {
         DIC_NAME = "${env.JOB_NAME}"
-        REPORT_FILE_NAME = "report-${env.BUILD_ID}"
+        REPORT_FILE_NAME = "report-${env.BUILD_ID}.html"
     }
     
     
@@ -70,7 +70,7 @@ pipeline {
                     sh 'npm run test'
                 }
                 sh 'node index.js'
-                sh 'cp test/report/cucumber_report.html /var/www/html/realAutoTest/${REPORT_FILE_NAME}.html'
+                sh 'cp test/report/cucumber_report.html /var/www/html/realAutoTest/${REPORT_FILE_NAME}'
             }
             
           }
@@ -141,6 +141,12 @@ pipeline {
           steps {
             cleanWs()
           }
+        }
+    }
+    
+    post {
+        always{
+            slackSend(channel: "real-automation", message: "Here is the report of RA automation: http://18.141.212.1/${REPORT_FILE_NAME}") 
         }
     }
 }
