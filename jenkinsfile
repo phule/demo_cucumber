@@ -70,7 +70,7 @@ pipeline {
                     sh 'npm run test'
                 }
                 sh 'node index.js'
-                sh 'cp test/report/cucumber_report.html /var/www/html/${REPORT_FILE_NAME}.html'
+                sh 'cp test/report/cucumber_report.html /var/www/html/realAutoTest/${REPORT_FILE_NAME}.html'
             }
             
           }
