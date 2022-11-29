@@ -14,13 +14,14 @@ pipeline {
 
     environment {
         DIC_NAME = "${env.JOB_NAME}"
+        REPORT_FILE_NAME = "${env.BUILD_ID}"
     }
     
     
     stages {
         stage('Build Qc Auto Test') {
             steps{
-                sh 'echo ${env.BUILD_ID}'
+                sh 'echo ${REPORT_FILE_NAME}'
 //                 script{
 //                     def remote = [:]
 //                     remote.name = 'ra-auto-test'
