@@ -22,14 +22,13 @@ pipeline {
     
     stages {
         stage('Build Qc Auto Test') {
-                    sh "echo ${COMMIT_ID}"
-                    sh "echo ${BRANCH_NAME}"
             steps{
+                sh "echo ${ghprbPullId}@@${ghprbActualCommit} >> sample_file.txt"
+                sh "cat sample_file.txt"
                 script{
                     def remote = [:]
                     remote.name = 'ra-auto-test'
                     remote.host = '52.13.190.167'
-                    
                     remote.allowAnyHosts = true
                     // get the present working directory (PWD)
                     String PWD = pwd()
