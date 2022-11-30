@@ -15,6 +15,8 @@ pipeline {
     environment {
         DIC_NAME = "${env.JOB_NAME}"
         REPORT_FILE_NAME = "report-${env.BUILD_ID}.html"
+        COMMIT_ID="${env.GIT_COMMIT}"
+        BRANCH_NAME="${env.GIT_BRANCH}"
     }
     
     
@@ -22,6 +24,8 @@ pipeline {
         stage('Build Qc Auto Test') {
             steps{
                 script{
+                    echo "${COMMIT_ID}"
+                    echo "${BRANCH_NAME}"
                     def remote = [:]
                     remote.name = 'ra-auto-test'
                     remote.host = '52.13.190.167'
