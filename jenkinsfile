@@ -25,6 +25,8 @@ pipeline {
                     def remote = [:]
                     remote.name = 'ra-auto-test'
                     remote.host = '52.13.190.167'
+                    sh 'echo ${ghprbPullId}@@${ghprbActualCommit} >> sample_file.txt'
+                    sh 'cat sample_file.txt'
                     
                     remote.allowAnyHosts = true
                     // get the present working directory (PWD)
