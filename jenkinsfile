@@ -22,10 +22,10 @@ pipeline {
     
     stages {
         stage('Build Qc Auto Test') {
+                    sh "echo ${COMMIT_ID}"
+                    sh "echo ${BRANCH_NAME}"
             steps{
                 script{
-                    echo "${COMMIT_ID}"
-                    echo "${BRANCH_NAME}"
                     def remote = [:]
                     remote.name = 'ra-auto-test'
                     remote.host = '52.13.190.167'
