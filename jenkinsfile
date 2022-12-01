@@ -17,34 +17,35 @@ pipeline {
         REPORT_FILE_NAME = "report-${env.BUILD_ID}.html"
         COMMIT_ID="${env.GIT_COMMIT}"
         BRANCH_NAME="${env.GIT_BRANCH}"
+        CHANGE_ID="${env.CHANGE_ID}"
     }
     
     
     stages {
         stage('Build Qc Auto Test') {
             steps{
-                sh "echo ${BRANCH_NAME}"
-                
-                script{
-                    def remote = [:]
-                    remote.name = 'ra-auto-test'
-                    remote.host = '52.13.190.167'
-                    remote.allowAnyHosts = true
-                    // get the present working directory (PWD)
-                    String PWD = pwd()
+                sh "echo branch name: ${BRANCH_NAME}"
+                sh "echo pull request id: ${CHANGE_ID}"
+//                 script{
+//                     def remote = [:]
+//                     remote.name = 'ra-auto-test'
+//                     remote.host = '52.13.190.167'
+//                     remote.allowAnyHosts = true
+//                     // get the present working directory (PWD)
+//                     String PWD = pwd()
 
-                    // based on this, construct the path to the workspace
-                    String workspacePath = PWD.substring(PWD.lastIndexOf('/') + 1, PWD.length())
-                    node {
-                        withCredentials([sshUserPrivateKey(credentialsId: 'ra-auto-test', keyFileVariable: 'id_rsa_qc', passphraseVariable: '', usernameVariable: 'forge')]) {
-                            remote.user = forge
-                            remote.identityFile = id_rsa_qc
-                            sshCommand remote: remote, command: 'for i in {1..5}; do echo -n \"Loop \$i \"; date ; sleep 1; done'
-                            sshScript remote: remote, script: "${env.PWD}/workspace/${env.JOB_NAME}/auto-test.sh"
+//                     // based on this, construct the path to the workspace
+//                     String workspacePath = PWD.substring(PWD.lastIndexOf('/') + 1, PWD.length())
+//                     node {
+//                         withCredentials([sshUserPrivateKey(credentialsId: 'ra-auto-test', keyFileVariable: 'id_rsa_qc', passphraseVariable: '', usernameVariable: 'forge')]) {
+//                             remote.user = forge
+//                             remote.identityFile = id_rsa_qc
+//                             sshCommand remote: remote, command: 'for i in {1..5}; do echo -n \"Loop \$i \"; date ; sleep 1; done'
+//                             sshScript remote: remote, script: "${env.PWD}/workspace/${env.JOB_NAME}/auto-test.sh"
                             
-                        }
-                    }
-                }   
+//                         }
+//                     }
+//                 }   
             }
         }
         stage('Clone the repo') {
