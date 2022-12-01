@@ -23,8 +23,8 @@ pipeline {
     stages {
         stage('Build Qc Auto Test') {
             steps{
-                sh "echo ${ghprbPullId}@@${ghprbActualCommit} >> sample_file.txt"
-                sh "cat sample_file.txt"
+                sh "echo ${BRANCH_NAME}"
+                
                 script{
                     def remote = [:]
                     remote.name = 'ra-auto-test'
