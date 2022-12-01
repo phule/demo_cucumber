@@ -21,6 +21,7 @@ pipeline {
     stages {
         stage('Build Qc Auto Test') {
             steps{
+              
                 script{
                     def remote = [:]
                     remote.name = 'ra-auto-test'
