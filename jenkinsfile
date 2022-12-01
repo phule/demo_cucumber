@@ -17,7 +17,7 @@ pipeline {
         REPORT_FILE_NAME = "report-${env.BUILD_ID}.html"
         COMMIT_ID="${env.GIT_COMMIT}"
         BRANCH_NAME="${env.GIT_BRANCH}"
-        CHANGE_ID="${env.CHANGE_ID}"
+        CHANGE_ID="${env.ghprbPullId}"
     }
     
     
@@ -25,7 +25,7 @@ pipeline {
         stage('Build Qc Auto Test') {
             steps{
                 sh "echo branch name: ${BRANCH_NAME}"
-                sh "echo pull request id: ${ghprbPullId}"
+                sh "echo pull request id: ${CHANGE_ID}"
 //                 script{
 //                     def remote = [:]
 //                     remote.name = 'ra-auto-test'
