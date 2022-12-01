@@ -25,7 +25,7 @@ pipeline {
         stage('Build Qc Auto Test') {
             steps{
                 sh "echo branch name: ${BRANCH_NAME}"
-                sh "echo pull request id: ${CHANGE_ID}"
+                sh "echo pull request id: ${ghprbPullId}"
 //                 script{
 //                     def remote = [:]
 //                     remote.name = 'ra-auto-test'
