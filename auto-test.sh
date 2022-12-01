@@ -2,7 +2,13 @@ cd releases-plus
 ls -lt | tail -n +5 | awk '{print $9}' | xargs rm -rf
 git clone git@github.com:Real-Authentication/BFS_RLA.git RA_$(date +"%Y%m%d%s") 
 cd $(ls -td -- */ | head -n 1)
-git checkout qc
+BRANCH_NAME=`cat branch.txt`
+echo "branch: $BRANCH_NAME"
+PR_ID=`cat change-id.txt`
+echo "pull request id: $PR_ID"
+git fetch --tags --force --progress -- git@github.com:phule/demo_cucumber.git +refs/pull/"$PR_ID"/*:refs/remotes/origin/pr/"$PR_ID"/*
+COMMIT_ID=`git rev-parse refs/remotes/"$BRANCH_NAME"^{commit}`
+git checkout $COMMIT_ID
 git pull
 cp ~/environment-plus/.env www/
 cp ~/environment-plus/.env.frontend www/front/.env
