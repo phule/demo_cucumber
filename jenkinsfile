@@ -32,6 +32,10 @@ pipeline {
                     remote.name = 'ra-auto-test'
                     remote.host = '52.13.190.167'
                     remote.allowAnyHosts = true
+                    if CHANGE_ID= == null
+                    {
+                        CHANGE_ID='${ghprbPullId}'
+                    }
                     // get the present working directory (PWD)
                     String PWD = pwd()
 
