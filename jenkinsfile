@@ -48,97 +48,97 @@ pipeline {
 //                 }   
             }
         }
-        stage('Clone the repo') {
-            steps {
-                echo 'clone the repo'
-                //sh 'rm -fr demo_cucumber'
-                //sh 'git clone https://github.com/phule/demo_cucumber.git'
-                sh 'rm -rf automation_cucumber'
-                sh 'git clone git@bitbucket.org:poetaadmin/codebase.automation-test.realauthentication.git -b demo-cucumber automation_cucumber'
+//         stage('Clone the repo') {
+//             steps {
+//                 echo 'clone the repo'
+//                 //sh 'rm -fr demo_cucumber'
+//                 //sh 'git clone https://github.com/phule/demo_cucumber.git'
+//                 sh 'rm -rf automation_cucumber'
+//                 sh 'git clone git@bitbucket.org:poetaadmin/codebase.automation-test.realauthentication.git -b demo-cucumber automation_cucumber'
                 
-            }
-        }
-        stage('Run Test') {
-          steps {
-            sh "echo Dependencies"
+//             }
+//         }
+//         stage('Run Test') {
+//           steps {
+//             sh "echo Dependencies"
            
-            dir("automation_cucumber"){
-              sh 'npm install'
-                catchError(buildResult: 'FAILURE', 
-                           stageResult: 'FAILURE',
-                          catchInterruptions: true,
-                           message: "Error") {
-                    sh 'chmod +x chromedriver'
-                    sh 'npm run test'
-                }
-                sh 'node index.js'
-                sh 'cp test/report/cucumber_report.html /var/www/html/realAutoTest/${REPORT_FILE_NAME}'
-            }
+//             dir("automation_cucumber"){
+//               sh 'npm install'
+//                 catchError(buildResult: 'FAILURE', 
+//                            stageResult: 'FAILURE',
+//                           catchInterruptions: true,
+//                            message: "Error") {
+//                     sh 'chmod +x chromedriver'
+//                     sh 'npm run test'
+//                 }
+//                 sh 'node index.js'
+//                 sh 'cp test/report/cucumber_report.html /var/www/html/realAutoTest/${REPORT_FILE_NAME}'
+//             }
             
-          }
-        }
+//           }
+//         }
 
-        stage('Get Results') {
-          steps {
-            sh "echo Get Results"
-              dir("automation_cucumber"){
-                  /*
-                  run test, copy the report file out of docker or where ever it is...
-                  */
+//         stage('Get Results') {
+//           steps {
+//             sh "echo Get Results"
+//               dir("automation_cucumber"){
+//                   /*
+//                   run test, copy the report file out of docker or where ever it is...
+//                   */
 
-                  //archiveArtifacts artifacts: "cucumber_report.html", fingerprint: true
+//                   //archiveArtifacts artifacts: "cucumber_report.html", fingerprint: true
 
-                  // our Groovy script will be contained in this scope
-                  script {
-                      println ('Extracting passed & failed values')
+//                   // our Groovy script will be contained in this scope
+//                   script {
+//                       println ('Extracting passed & failed values')
 
-                      // get the present working directory (PWD)
-                      String PWD = pwd()
+//                       // get the present working directory (PWD)
+//                       String PWD = pwd()
 
-                      // based on this, construct the path to the workspace
-                      String workspacePath = PWD.substring(PWD.lastIndexOf('/') + 1, PWD.length())
+//                       // based on this, construct the path to the workspace
+//                       String workspacePath = PWD.substring(PWD.lastIndexOf('/') + 1, PWD.length())
 
-                      // read our HTML report into a String
-                      String report = readFile ("${env.PWD}/workspace/${env.JOB_NAME}/${workspacePath}/test/report/cucumber_report.html")
+//                       // read our HTML report into a String
+//                       String report = readFile ("${env.PWD}/workspace/${env.JOB_NAME}/${workspacePath}/test/report/cucumber_report.html")
 
-                      // split each line break into its own String
-                      String[] lines = report.split("\n")
+//                       // split each line break into its own String
+//                       String[] lines = report.split("\n")
                      
-                      // use regex to find the "passed" line and "failed" line
-                      def foundPassedLine = lines.find{ line-> line =~ /span class="label label-success"/ }
-                      def foundFailedLine = lines.find{ line-> line =~ /span class="label label-danger"/ }
+//                       // use regex to find the "passed" line and "failed" line
+//                       def foundPassedLine = lines.find{ line-> line =~ /span class="label label-success"/ }
+//                       def foundFailedLine = lines.find{ line-> line =~ /span class="label label-danger"/ }
                       
-                      // match for the numeric values
-                      def passedMatch = (foundPassedLine =~ /[0-9]+/)
-                      def failedMatch = (foundFailedLine =~ /[0-9]+/)
+//                       // match for the numeric values
+//                       def passedMatch = (foundPassedLine =~ /[0-9]+/)
+//                       def failedMatch = (foundFailedLine =~ /[0-9]+/)
 
-                      // cast to Integer so we can work with the number values
-                      e2ePassed = passedMatch[0] as Integer
-                      e2eFailed = failedMatch[0] as Integer
-                      e2eTotal = e2eFailed + e2ePassed
-                      e2ePercent = 0
-                      if(e2eTotal > 0){
-                        e2ePercent = e2ePassed / e2eTotal * 100
-                      }  
-                      if (e2eFailed > 0) {
-                          // do something extra if there are failures
-                          currentBuild.result = "FAILURE"
-                      }
+//                       // cast to Integer so we can work with the number values
+//                       e2ePassed = passedMatch[0] as Integer
+//                       e2eFailed = failedMatch[0] as Integer
+//                       e2eTotal = e2eFailed + e2ePassed
+//                       e2ePercent = 0
+//                       if(e2eTotal > 0){
+//                         e2ePercent = e2ePassed / e2eTotal * 100
+//                       }  
+//                       if (e2eFailed > 0) {
+//                           // do something extra if there are failures
+//                           currentBuild.result = "FAILURE"
+//                       }
 
-                      // print out our results to the console
-                      println ("Passed: ${e2ePassed}")
-                      println ("Failed: ${e2eFailed}")
-                      println ("Percent passes: ${e2ePercent}%")
-                  }
+//                       // print out our results to the console
+//                       println ("Passed: ${e2ePassed}")
+//                       println ("Failed: ${e2eFailed}")
+//                       println ("Percent passes: ${e2ePercent}%")
+//                   }
 
-                  // we can also access these values in an `sh` declaration (or other functions) outside of `script` now
-                  sh "echo \"Passed: ${e2ePassed}\""
-                  sh "echo \"Failed: ${e2eFailed}\""
-                  sh "echo \"Percent passes: ${e2ePercent}%\""
-              }
-              // you may opt to use the vars in plugins like `slackSend`, etc
-          }
-        }
+//                   // we can also access these values in an `sh` declaration (or other functions) outside of `script` now
+//                   sh "echo \"Passed: ${e2ePassed}\""
+//                   sh "echo \"Failed: ${e2eFailed}\""
+//                   sh "echo \"Percent passes: ${e2ePercent}%\""
+//               }
+//               // you may opt to use the vars in plugins like `slackSend`, etc
+//           }
+//         }
         stage('Clean') {
           steps {
             cleanWs()
